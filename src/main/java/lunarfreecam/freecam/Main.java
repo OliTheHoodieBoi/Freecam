@@ -1,7 +1,9 @@
 package lunarfreecam.freecam;
 
 import FreecamUtils.NpcManager;
+import com.google.gson.JsonArray;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class Main extends JavaPlugin implements Listener {
     public static HashMap<UUID, LivingEntity> npcs = new HashMap<>();
     public static ArrayList<Player> playersInFreecam = new ArrayList<>();
+    public static ArrayList<Chunk> forceLoadedChunks = new ArrayList<>();
     public static String version = null;
     public static int pluginID = 81104;
 

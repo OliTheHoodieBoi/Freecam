@@ -4,8 +4,10 @@ import com.cryptomorin.xseries.XMaterial;
 import de.tr7zw.nbtapi.NBTEntity;
 import lunarfreecam.freecam.FreecamCommand;
 import lunarfreecam.freecam.Main;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
@@ -46,6 +48,10 @@ public class NpcManager {
         zombie.getEquipment().setLeggings(player.getEquipment().getLeggings() != null && !player.getEquipment().getLeggings().getType().equals(Material.AIR) ? player.getEquipment().getLeggings() : XMaterial.LEATHER_LEGGINGS.parseItem());
         zombie.getEquipment().setBoots(player.getEquipment().getBoots() != null && !player.getEquipment().getBoots().getType().equals(Material.AIR) ? player.getEquipment().getBoots() : XMaterial.LEATHER_BOOTS.parseItem());
         Main.npcs.put(player.getUniqueId(), zombie);
+        // Force load chunk
+        Chunk chunk = player.getChunk();
+        chunk.setForceLoaded(true);
+        Main.forceLoadedChunks.add(chunk);
     }
 
     /**
@@ -54,7 +60,11 @@ public class NpcManager {
      * @param player
      */
     public void deleteNpc(Player player) {
-        Main.npcs.get(player.getUniqueId()).remove();
+        LivingEntity npc = Main.npcs.get(player.getUniqueId());
+        Chunk chunk = npc.getChunk();
+        if (chunk.isForceLoaded() && Main.forceLoadedChunks.contains(chunk))
+            chunk.setForceLoaded(false);
+        npc.remove();
     }
 
     public void exitFreecam(Player player, GameMode mode) {

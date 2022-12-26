@@ -157,19 +157,6 @@ public class Handler implements Listener {
         }
     }
 
-    /**
-     * Stop chunk from unloading if it contains a freecam npc
-     *
-     * @param event event
-     */
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event) {
-        Chunk chunk = event.getChunk();
-        for (Entity entity : chunk.getEntities())
-            if (entity instanceof LivingEntity && Main.npcs.containsValue(entity))
-                event.setCancelled(true);
-    }
-
     public <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet())
             if (entry.getValue().equals(value))
