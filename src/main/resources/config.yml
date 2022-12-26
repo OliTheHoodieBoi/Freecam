@@ -22,7 +22,6 @@ cannot-use-commands-message: "&8&l[&c&l!&8&l] &7You cant use commands while in F
 maximum-distance-reached-message: "&8&l[&c&l!&8&l] &7You have reached the maximum allowed distance."
 no-permission-message: "&8&l[&c&l!&8&l] &7You don't have permission to use this command."
 freecam-not-player: "&8&l[&c&l!&8&l] &7Only players can use this command!"
-freecam-cooldown: "&8&l[&c&l!&8&l] &7You must wait %seconds% seconds before you do it again."
 freecam-spectate-teleport: "&8&l[&c&l!&8&l] &7You cant teleport when you are at freecam mode."
 freecam-cant-open-inv: "&8&l[&c&l!&8&l] &7You cant interact with inventories when you are on freecam mode"
 freecam-cant-drop-items: "&8&l[&c&l!&8&l] &7You cant drop items when you are on freecam mode"
@@ -39,7 +38,6 @@ freecam-tp-while-in-freecam: "&8&l[&c&l!&8&l] &7You cant tp to someone when in f
 ##################################################
 #                 Freecam Settings               #
 ##################################################
-freecam-cooldown-seconds: 45
 #Use -1 for unlimited freecam period
 freecam-period: 30
 #Use -1 for unlimited freecam distance

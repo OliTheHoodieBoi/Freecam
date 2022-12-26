@@ -18,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class Main extends JavaPlugin implements Listener {
-    public static HashMap<UUID, Long> cooldowns = new HashMap<>();
     public static HashMap<UUID, LivingEntity> npcs = new HashMap<>();
     private boolean isVaultEnabled;
     public static ArrayList<Player> playersInFreecam = new ArrayList<>();

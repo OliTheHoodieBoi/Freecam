@@ -47,10 +47,6 @@ public class Commands implements CommandExecutor {
             return true;
         }
         if (args.length == 0) {
-            if (utils.isPlayerOnCooldown(player, Main.cooldowns, plugin.getConfig().getInt("freecam-cooldown-seconds"))) {
-                player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-cooldown").replace("%seconds%", String.valueOf(utils.getCoolDownTimeRemaining(player, Main.cooldowns, plugin.getConfig().getInt("freecam-cooldown-seconds"))))));
-                return true;
-            }
             //Activate freecam
             if (plugin.getConfig().getBoolean("freecam-charge-money")) {
                 if (plugin.isVaultEnabled()) {
@@ -71,7 +67,6 @@ public class Commands implements CommandExecutor {
             previousGamemode.put(player, player.getGameMode());
             player.setGameMode(GameMode.SPECTATOR);
             npcManager.createNpc(player);
-            Main.cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
             BukkitTask task = new FreecamCountDown(player, plugin.getConfig().getInt("freecam-period"), plugin).runTaskTimer(plugin, 0, 20);
             Main.playersInFreecam.add(player);
         } else {
