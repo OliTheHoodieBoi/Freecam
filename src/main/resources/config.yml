@@ -18,6 +18,7 @@
 freecam-mode-on-success: "&8&l[&2&l!&8&l] &7Successfully went into FreeCam mode."
 freecam-mode-off-success: "&8&l[&2&l!&8&l] &7Successfully went back to your previous location."
 too-many-arguments: "&8&l[&c&l!&8&l] &7Too many arguments. Usage: &5/freecam"
+invalid-use: "&8&l[&c&l!&8&l] &7Invalid use. Usage: &5/freecam"
 cannot-use-commands: "&8&l[&c&l!&8&l] &7You can't use commands while in FreeCam mode."
 maximum-distance-reached: "&8&l[&c&l!&8&l] &7You have reached the maximum allowed distance."
 no-permission: "&8&l[&c&l!&8&l] &7You don't have permission to use this command."

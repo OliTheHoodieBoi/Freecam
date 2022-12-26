@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -35,9 +36,9 @@ public class FreecamCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getConfig().getString("freecam-not-player"));
+            sender.sendMessage(utils.Color(plugin.getConfig().getString("freecam-not-player")));
             return true;
         }
         Player player = (Player) sender;
@@ -47,28 +48,33 @@ public class FreecamCommand implements CommandExecutor {
             return true;
         }
         switch (args.length) {
-            case 0 -> activateFreecam(player);
-            case 1 -> {
+            case 0:
+                activateFreecam(player);
+                return true;
+            case 1:
                 switch (args[0].toLowerCase()) {
-                    case "stop" -> {
+                    case "stop":
                         if (Main.npcs.containsKey(player.getUniqueId()))
                             npcManager.exitFreecam(player, previousGamemode.get(player));
                         else
                             player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-no-use")));
-                    }
-                    case "reload" -> {
+                        return true;
+                    case "reload":
                         if (player.hasPermission("freecam.reload")) {
                             plugin.reloadConfig();
                             player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-reload")));
                         } else {
                             player.sendMessage(utils.Color(plugin.getConfig().getString("no-permission")));
                         }
-                    }
+                        return true;
+                    default:
+                        player.sendMessage(utils.Color(plugin.getConfig().getString("invalid-use")));
+                        return true;
                 }
-            }
-            default -> player.sendMessage(utils.Color(plugin.getConfig().getString("too-many-arguments")));
+            default:
+                player.sendMessage(utils.Color(plugin.getConfig().getString("too-many-arguments")));
+                return true;
         }
-        return true;
     }
 
     private void activateFreecam(Player player) {
