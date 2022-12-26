@@ -22,7 +22,7 @@ import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
 public class Main extends JavaPlugin {
     public final static HashMap<UUID, LivingEntity> npcs = new HashMap<>();
     public final static ArrayList<Player> playersInFreecam = new ArrayList<>();
-    public final static HashMap<UUID, GameMode> previousGamemode = new HashMap<>();
+    public final static HashMap<UUID, PlayerState> previousState = new HashMap<>();
     public static ArrayList<Chunk> forceLoadedChunks = new ArrayList<>();
     public static String version = null;
     public static int pluginID = 81104;

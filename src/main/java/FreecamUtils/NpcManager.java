@@ -73,14 +73,12 @@ public class NpcManager {
     }
 
     public static void exitFreecam(Player player) {
-        player.setGameMode(Main.previousGamemode.get(player.getUniqueId()));
+        Main.previousState.get(player.getUniqueId()).apply(player);
         LivingEntity npc = Main.npcs.get(player.getUniqueId());
         player.teleport(npc.getLocation());
-        player.setVelocity(npc.getVelocity());
-        player.setHealth(npc.getHealth());
         deleteNpc(player);
         Main.npcs.remove(player.getUniqueId());
-        Main.previousGamemode.remove(player.getUniqueId());
+        Main.previousState.remove(player.getUniqueId());
         Main.playersInFreecam.remove(player);
     }
 }

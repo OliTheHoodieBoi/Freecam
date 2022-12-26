@@ -10,8 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 
 public class FreecamCommand implements CommandExecutor {
 
@@ -31,12 +29,16 @@ public class FreecamCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if (!player.hasPermission("freecam.use")) {
-            player.sendMessage(utils.Color(plugin.getConfig().getString("no-permission")));
-            return true;
-        }
         switch (args.length) {
             case 0:
+                if (!player.hasPermission("freecam.use")) {
+                    player.sendMessage(utils.Color(plugin.getConfig().getString("no-permission")));
+                    return true;
+                }
+                if (player.getGameMode() == GameMode.SPECTATOR) {
+                    player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-spectator")));
+                    return true;
+                }
                 activateFreecam(player);
                 return true;
             case 1:
@@ -71,7 +73,7 @@ public class FreecamCommand implements CommandExecutor {
             return;
         }
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100, 2);
-        Main.previousGamemode.put(player.getUniqueId(), player.getGameMode());
+        Main.previousState.put(player.getUniqueId(), new PlayerState(player));
         player.setGameMode(GameMode.SPECTATOR);
         npcManager.createNpc(player);
         Main.playersInFreecam.add(player);
