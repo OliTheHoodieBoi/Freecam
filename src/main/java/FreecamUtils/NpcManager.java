@@ -7,12 +7,16 @@ import lunarfreecam.freecam.Main;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -23,30 +27,37 @@ public class NpcManager {
     public void createNpc(Player player) {
         // Create a normal zombie
         Zombie zombie = player.getWorld().spawn(player.getLocation(), Zombie.class);
-        zombie.setBaby(false);
-        zombie.setVillager(false);
-        zombie.setPassenger(null);
+        Entity vehicle = zombie.getVehicle();
+        if (vehicle != null)
+            vehicle.remove();
         // Modify zombie NBT
         NBTEntity zombieNBT = new NBTEntity(zombie);
         zombieNBT.setByte("Silent", (byte) 1);
         zombieNBT.setByte("NoAI", (byte) 1);
+        zombieNBT.setByte("IsBaby", (byte) 0);
         zombieNBT.setByte("NoGravity", (byte) 0);
         zombieNBT.setByte("CustomNameVisible", (byte) 1);
+        zombieNBT.setString("CustomName", player.displayName().toString());
         zombieNBT.setByte("PersistenceRequired", (byte) 1);
+        zombieNBT.setByte("Glowing", (byte) 1);
+        zombieNBT.setByte("CanPickUpLoot", (byte) 0);
+        zombieNBT.setString("DeathLootTable", "");
+        zombieNBT.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
+        zombieNBT.setObject("HandDropChances", new float[]{0.0f, 0.0f});
+        zombie.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(0.0d);
         // Make zombie resemble player
-        zombie.setCustomName(player.getDisplayName());
 
-        ItemStack playerhead = new ItemStack(Objects.requireNonNull(XMaterial.PLAYER_HEAD.parseMaterial()), 1, (byte) 3);
+        ItemStack playerhead = XMaterial.PLAYER_HEAD.parseItem();
         SkullMeta meta = (SkullMeta) playerhead.getItemMeta();
-        meta.setOwner(player.getName());
-        meta.setDisplayName(player.getDisplayName());
+        meta.setOwningPlayer(player);
         playerhead.setItemMeta(meta);
         zombie.getEquipment().setHelmet(playerhead);
         // Copy player equipment to zombie
-        zombie.getEquipment().setItemInHand(player.getItemInHand());
-        zombie.getEquipment().setChestplate(player.getEquipment().getChestplate() != null && !player.getEquipment().getChestplate().getType().equals(Material.AIR) ? player.getEquipment().getChestplate() : XMaterial.LEATHER_CHESTPLATE.parseItem());
-        zombie.getEquipment().setLeggings(player.getEquipment().getLeggings() != null && !player.getEquipment().getLeggings().getType().equals(Material.AIR) ? player.getEquipment().getLeggings() : XMaterial.LEATHER_LEGGINGS.parseItem());
-        zombie.getEquipment().setBoots(player.getEquipment().getBoots() != null && !player.getEquipment().getBoots().getType().equals(Material.AIR) ? player.getEquipment().getBoots() : XMaterial.LEATHER_BOOTS.parseItem());
+        zombie.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());
+        zombie.getEquipment().setItemInOffHand(player.getInventory().getItemInOffHand());
+        zombie.getEquipment().setChestplate(player.getEquipment().getChestplate());
+        zombie.getEquipment().setLeggings(player.getEquipment().getLeggings());
+        zombie.getEquipment().setBoots(player.getEquipment().getBoots());
         Main.npcs.put(player.getUniqueId(), zombie);
         // Force load chunk
         Chunk chunk = player.getChunk();
@@ -69,7 +80,10 @@ public class NpcManager {
 
     public void exitFreecam(Player player, GameMode mode) {
         player.setGameMode(mode);
-        player.teleport(Main.npcs.get(player.getUniqueId()).getLocation());
+        LivingEntity npc = Main.npcs.get(player.getUniqueId());
+        player.teleport(npc.getLocation());
+        player.setVelocity(npc.getVelocity());
+        player.setHealth(npc.getHealth());
         this.deleteNpc(player);
         Main.npcs.remove(player.getUniqueId());
         FreecamCommand.previousGamemode.remove(player);
