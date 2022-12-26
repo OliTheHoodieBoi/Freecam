@@ -17,14 +17,14 @@ public class FreecamCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(Main.Color(plugin.getConfig().getString("freecam-not-player")));
-            return true;
-        }
-        Player player = (Player) sender;
 
         switch (args.length) {
             case 0:
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(Main.Color(plugin.getConfig().getString("freecam-not-player")));
+                    return true;
+                }
+                Player player = (Player) sender;
                 if (!player.hasPermission("freecam.use")) {
                     player.sendMessage(Main.Color(plugin.getConfig().getString("no-permission")));
                     return true;
@@ -33,18 +33,18 @@ public class FreecamCommand implements CommandExecutor {
                 return true;
             case 1:
                 if (args[0].equalsIgnoreCase("reload")) {
-                    if (player.hasPermission("freecam.reload")) {
+                    if (sender.hasPermission("freecam.reload")) {
                         plugin.reloadConfig();
-                        player.sendMessage(Main.Color(plugin.getConfig().getString("reload")));
+                        sender.sendMessage(Main.Color(plugin.getConfig().getString("reload")));
                     } else {
-                        player.sendMessage(Main.Color(plugin.getConfig().getString("no-permission")));
+                        sender.sendMessage(Main.Color(plugin.getConfig().getString("no-permission")));
                     }
                 } else {
-                    player.sendMessage(Main.Color(plugin.getConfig().getString("invalid-use")));
+                    sender.sendMessage(Main.Color(plugin.getConfig().getString("invalid-use")));
                 }
                 return true;
             default:
-                player.sendMessage(Main.Color(plugin.getConfig().getString("too-many-arguments")));
+                 sender.sendMessage(Main.Color(plugin.getConfig().getString("too-many-arguments")));
                 return true;
         }
     }

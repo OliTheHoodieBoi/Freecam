@@ -35,10 +35,6 @@ public class Handler implements Listener {
             player.sendMessage(Main.Color(plugin.getConfig().getString("freecam-illegal")));
             event.setCancelled(true);
         }
-        if (!Main.playersInFreecam.contains(event.getPlayer()) && Main.playersInFreecam.stream().anyMatch(c -> c.getLocation().getWorld().equals(event.getTo().getWorld()) && c.getLocation().distance(event.getTo()) < 0.1)) {
-            event.getPlayer().sendMessage(Main.Color(plugin.getConfig().getString("freecam-illegal")));
-            event.setCancelled(true);
-        }
     }
 
     /**

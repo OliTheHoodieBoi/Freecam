@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.lunarfreecam</groupId>
-    <artifactId>LunarFreecam</artifactId>
-    <version>2.0</version>
+    <artifactId>Freecam</artifactId>
+    <version>2.1</version>
     <packaging>jar</packaging>
 
     <name>LunarFreecam</name>

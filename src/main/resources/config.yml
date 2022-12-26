@@ -15,14 +15,14 @@
 ##################################################
 #                   Messages                     #
 ##################################################
-too-many-arguments: "&8&l[&c&l!&8&l] &7Too many arguments. Usage: &5/freecam"
-invalid-use: "&8&l[&c&l!&8&l] &7Invalid use. Usage: &5/freecam"
-no-permission: "&8&l[&c&l!&8&l] &7You don't have permission to use this command."
-spectator: "&8&l[&c&l!&8&l] &7You cannot enter freecam in spectator mode."
-freecam-not-player: "&8&l[&c&l!&8&l] &7Only players can use this command!"
-freecam-illegal: "&8&l[&c&l!&8&l] &7You may not do this while in freecam mode."
-freecam-cancelled: "&8&l[&c&l!&8&l] &cYou were kicked out of freecam mode since your npc was hurt."
-reload: "&8&l[&c&l!&8&l] &7Config reloaded Successfully"
+too-many-arguments: "&8&l[&c&l!&8&l] &cToo many arguments. Usage: &7/freecam"
+invalid-use: "&8&l[&c&l!&8&l] &cInvalid use. Usage: &7/freecam"
+no-permission: "&8&l[&c&l!&8&l] &cYou don't have permission to use this command."
+spectator: "&8&l[&c&l!&8&l] &cYou cannot enter freecam in spectator mode!"
+freecam-not-player: "&8&l[&c&l!&8&l] &cOnly players can use this command."
+freecam-illegal: "&8&l[&c&l!&8&l] &cYou may not do this in freecam mode."
+freecam-cancelled: "&8&l[&c&l!&8&l] &7You were kicked out of freecam mode since your npc was hurt."
+reload: "&8&l[&c&l!&8&l] &7Config reloaded successfully."
 ##################################################
 #             LunarFreecam Perms                 #
 ##################################################
