@@ -43,12 +43,13 @@
                             <artifactSet>
                                 <includes>
                                     <include>me.lucko:commodore</include>
+                                    <include>de.tr7zw:item-nbt-api</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                                    <shadedPattern>lunarfreecam.nbtapi</shadedPattern>
+                                    <shadedPattern>lunarfreecam.freecam.nbtapi</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.connorlinfoot.actionbarapi</pattern>
@@ -56,7 +57,7 @@
                                 </relocation>
                                 <relocation>
                                     <pattern>me.lucko.commodore</pattern>
-                                    <shadedPattern>me.lunarfreecam.freecam.commodore</shadedPattern>
+                                    <shadedPattern>lunarfreecam.freecam.commodore</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -111,8 +112,8 @@
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>
-            <artifactId>item-nbt-api-plugin</artifactId>
-            <version>2.9.2</version>
+            <artifactId>item-nbt-api</artifactId>
+            <version>2.10.0</version>
         </dependency>
         <dependency>
             <groupId>me.lucko</groupId>

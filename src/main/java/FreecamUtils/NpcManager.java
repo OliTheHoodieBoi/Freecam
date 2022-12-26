@@ -1,23 +1,16 @@
 package FreecamUtils;
 
-import com.cryptomorin.xseries.XMaterial;
-import de.tr7zw.nbtapi.NBTEntity;
-import lunarfreecam.freecam.FreecamCommand;
+import de.tr7zw.changeme.nbtapi.NBTEntity;
 import lunarfreecam.freecam.Main;
 import org.bukkit.Chunk;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class NpcManager {
@@ -25,8 +18,9 @@ public class NpcManager {
      * Spawn the Zombie-NPC
      */
     public void createNpc(Player player) {
-        // Create a normal zombie
+        // Create a zombie
         Zombie zombie = player.getWorld().spawn(player.getLocation(), Zombie.class);
+        // Remove vehicle if there is one
         Entity vehicle = zombie.getVehicle();
         if (vehicle != null)
             vehicle.remove();
@@ -37,7 +31,7 @@ public class NpcManager {
         zombieNBT.setByte("IsBaby", (byte) 0);
         zombieNBT.setByte("NoGravity", (byte) 0);
         zombieNBT.setByte("CustomNameVisible", (byte) 1);
-        zombieNBT.setString("CustomName", player.displayName().toString());
+        zombieNBT.setString("CustomName", String.format("\"%s\"", player.displayName()));
         zombieNBT.setByte("PersistenceRequired", (byte) 1);
         zombieNBT.setByte("Glowing", (byte) 1);
         zombieNBT.setByte("CanPickUpLoot", (byte) 0);
@@ -47,7 +41,7 @@ public class NpcManager {
         zombie.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(0.0d);
         // Make zombie resemble player
 
-        ItemStack playerhead = XMaterial.PLAYER_HEAD.parseItem();
+        ItemStack playerhead = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) playerhead.getItemMeta();
         meta.setOwningPlayer(player);
         playerhead.setItemMeta(meta);
@@ -70,7 +64,7 @@ public class NpcManager {
      *
      * @param player
      */
-    public void deleteNpc(Player player) {
+    public static void deleteNpc(Player player) {
         LivingEntity npc = Main.npcs.get(player.getUniqueId());
         Chunk chunk = npc.getChunk();
         if (chunk.isForceLoaded() && Main.forceLoadedChunks.contains(chunk))
@@ -78,15 +72,15 @@ public class NpcManager {
         npc.remove();
     }
 
-    public void exitFreecam(Player player, GameMode mode) {
-        player.setGameMode(mode);
+    public static void exitFreecam(Player player) {
+        player.setGameMode(Main.previousGamemode.get(player.getUniqueId()));
         LivingEntity npc = Main.npcs.get(player.getUniqueId());
         player.teleport(npc.getLocation());
         player.setVelocity(npc.getVelocity());
         player.setHealth(npc.getHealth());
-        this.deleteNpc(player);
+        deleteNpc(player);
         Main.npcs.remove(player.getUniqueId());
-        FreecamCommand.previousGamemode.remove(player);
+        Main.previousGamemode.remove(player.getUniqueId());
         Main.playersInFreecam.remove(player);
     }
 }

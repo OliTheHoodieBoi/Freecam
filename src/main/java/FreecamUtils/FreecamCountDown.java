@@ -18,7 +18,7 @@ public class FreecamCountDown extends BukkitRunnable {
         this.player= player;
         this.seconds = seconds;
         this.plugin = main;
-        this.mode= FreecamCommand.previousGamemode.get(player);
+        this.mode= Main.previousGamemode.get(player.getUniqueId());
         this.npcmngr = new NpcManager();
     }
     @Override
@@ -32,7 +32,7 @@ public class FreecamCountDown extends BukkitRunnable {
         if(plugin.getConfig().getDouble("freecam-max-distance")>0 || seconds>0) {
             if ( !((Entity)Main.npcs.get(player.getUniqueId())).getWorld().equals(player.getWorld()) || getDistanceBetweenEntities(player, (Entity) Main.npcs.get(player.getUniqueId())) > plugin.getConfig().getDouble("freecam-max-distance")) {
                 this.cancel();
-                npcmngr.exitFreecam(player, mode);
+                npcmngr.exitFreecam(player);
                 player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-max-distance-reach")));
                 ActionBar.sendActionBar(player, utils.Color(plugin.getConfig().getString("freecam-max-distance-reach")));
 
@@ -41,7 +41,7 @@ public class FreecamCountDown extends BukkitRunnable {
                 seconds -= 1;
             } else {
                 this.cancel();
-                npcmngr.exitFreecam(player, mode);
+                npcmngr.exitFreecam(player);
             }
         }else{
             ActionBar.sendActionBar(player, utils.Color(plugin.getConfig().getString("freecam-action-bar").replace("%seconds%", "")));

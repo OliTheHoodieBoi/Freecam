@@ -2,12 +2,9 @@ package lunarfreecam.freecam;
 
 import FreecamUtils.NpcManager;
 import FreecamUtils.utils;
-import com.cryptomorin.xseries.XSound;
+import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.GameMode;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,44 +14,21 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
-import org.bukkit.event.world.ChunkUnloadEvent;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Handler implements Listener {
 
     private final Main plugin;
-    private final NpcManager npcManager;
 
 
     public Handler(Main plugin) {
         this.plugin = plugin;
-        this.npcManager = new NpcManager();
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     /**
-     * For commands when player is in freecam mode
-     *
-     * @param event event
-     */
-    @EventHandler
-    public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
-        Player player = event.getPlayer();
-        String message = event.getMessage();
-        ArrayList<String> whitelistedCommands = new ArrayList<>(plugin.getConfig().getStringList("freecam-whitelisted-commands"));
-        if (Main.npcs.containsKey(player.getUniqueId())) {
-            if (!whitelistedCommands.contains(message)) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("on-freecam-cmd")));
-                player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_BASS.parseSound(), 100, 0);
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    /**
-     * Stop player in freecam from using spectator teleport
+     * Stop player in freecam mode from using spectator teleport
      *
      * @param event event
      */
@@ -62,14 +36,26 @@ public class Handler implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.SPECTATE) && Main.npcs.containsKey(player.getUniqueId())) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("freecam-spectate-teleport")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("freecam-illegal")));
             event.setCancelled(true);
         }
         if (!Main.playersInFreecam.contains(event.getPlayer()) && Main.playersInFreecam.stream().anyMatch(c -> c.getLocation().getWorld().equals(event.getTo().getWorld()) && c.getLocation().distance(event.getTo()) < 0.1)) {
-            event.getPlayer().sendMessage(utils.Color(plugin.getConfig().getString("freecam-tp-while-in-freecam")));
+            event.getPlayer().sendMessage(utils.Color(plugin.getConfig().getString("freecam-illegal")));
             event.setCancelled(true);
         }
+    }
 
+    /**
+     * Stop player in freecam mode from spectating entities
+     * @param event event
+     */
+    @EventHandler
+    public void onPlayerStartSpectating(PlayerStartSpectatingEntityEvent event) {
+        Player player = event.getPlayer();
+        if (Main.npcs.containsKey(player.getUniqueId())) {
+            player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-illegal")));
+            event.setCancelled(true);
+        }
     }
 
     /**
@@ -80,12 +66,8 @@ public class Handler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDisconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (Main.npcs.containsKey(player.getUniqueId())) {
-            player.setGameMode(GameMode.SURVIVAL);
-            player.teleport(Main.npcs.get(player.getUniqueId()).getLocation());
-            npcManager.deleteNpc(player);
-            Main.npcs.remove(player.getUniqueId());
-        }
+        if (Main.npcs.containsKey(player.getUniqueId()))
+            NpcManager.exitFreecam(player);
     }
 
     /**
@@ -102,7 +84,8 @@ public class Handler implements Listener {
         if (Main.npcs.containsValue(victim)) {
             event.setCancelled(true);
             Player player = Bukkit.getPlayer(getKey(Main.npcs, victim));
-            npcManager.exitFreecam(player, FreecamCommand.previousGamemode.get(player));
+            assert player != null;
+            NpcManager.exitFreecam(player);
         }
     }
 
@@ -148,13 +131,8 @@ public class Handler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDisconnect(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        if (Main.npcs.containsKey(player.getUniqueId())) {
-            player.setGameMode(GameMode.SURVIVAL);
-            player.teleport(Main.npcs.get(player.getUniqueId()).getLocation());
-            npcManager.deleteNpc(player);
-            Main.npcs.remove(player.getUniqueId());
-
-        }
+        if (Main.npcs.containsKey(player.getUniqueId()))
+            NpcManager.exitFreecam(player);
     }
 
     public <K, V> K getKey(Map<K, V> map, V value) {
