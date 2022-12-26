@@ -35,32 +35,20 @@ public class FreecamCommand implements CommandExecutor {
                     player.sendMessage(utils.Color(plugin.getConfig().getString("no-permission")));
                     return true;
                 }
-                if (player.getGameMode() == GameMode.SPECTATOR) {
-                    player.sendMessage(utils.Color(plugin.getConfig().getString("spectator")));
-                    return true;
-                }
                 activateFreecam(player);
                 return true;
             case 1:
-                switch (args[0].toLowerCase()) {
-                    case "stop":
-                        if (Main.npcs.containsKey(player.getUniqueId()))
-                            NpcManager.exitFreecam(player);
-                        else
-                            player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-no-use")));
-                        return true;
-                    case "reload":
-                        if (player.hasPermission("freecam.reload")) {
-                            plugin.reloadConfig();
-                            player.sendMessage(utils.Color(plugin.getConfig().getString("reload")));
-                        } else {
-                            player.sendMessage(utils.Color(plugin.getConfig().getString("no-permission")));
-                        }
-                        return true;
-                    default:
-                        player.sendMessage(utils.Color(plugin.getConfig().getString("invalid-use")));
-                        return true;
+                if (args[0].equalsIgnoreCase("reload")) {
+                    if (player.hasPermission("freecam.reload")) {
+                        plugin.reloadConfig();
+                        player.sendMessage(utils.Color(plugin.getConfig().getString("reload")));
+                    } else {
+                        player.sendMessage(utils.Color(plugin.getConfig().getString("no-permission")));
+                    }
+                } else {
+                    player.sendMessage(utils.Color(plugin.getConfig().getString("invalid-use")));
                 }
+                return true;
             default:
                 player.sendMessage(utils.Color(plugin.getConfig().getString("too-many-arguments")));
                 return true;
@@ -69,7 +57,13 @@ public class FreecamCommand implements CommandExecutor {
 
     private void activateFreecam(Player player) {
         if (Main.npcs.containsKey(player.getUniqueId())) {
-            player.sendMessage(utils.Color(plugin.getConfig().getString("already-freecam")));
+            // Exit freecam
+            NpcManager.exitFreecam(player);
+            return;
+        }
+        // Enter freecam
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            player.sendMessage(utils.Color(plugin.getConfig().getString("spectator")));
             return;
         }
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100, 2);
