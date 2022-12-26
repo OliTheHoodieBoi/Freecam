@@ -2,6 +2,7 @@ package FreecamUtils;
 
 import de.tr7zw.changeme.nbtapi.NBTEntity;
 import lunarfreecam.freecam.Main;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -31,7 +32,8 @@ public class NpcManager {
         zombieNBT.setByte("IsBaby", (byte) 0);
         zombieNBT.setByte("NoGravity", (byte) 0);
         zombieNBT.setByte("CustomNameVisible", (byte) 1);
-        zombieNBT.setString("CustomName", String.format("\"%s\"", player.displayName()));
+        String jsonName = GsonComponentSerializer.gson().serialize(player.displayName());
+        zombieNBT.setString("CustomName", jsonName);
         zombieNBT.setByte("PersistenceRequired", (byte) 1);
         zombieNBT.setByte("Glowing", (byte) 1);
         zombieNBT.setByte("CanPickUpLoot", (byte) 0);

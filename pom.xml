@@ -121,5 +121,10 @@
             <version>2.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+        <groupId>net.kyori</groupId>
+        <artifactId>adventure-text-serializer-gson</artifactId>
+        <version>4.12.0</version>
+    </dependency>
     </dependencies>
 </project>
