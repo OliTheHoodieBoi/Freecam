@@ -19,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
     public static HashMap<UUID, LivingEntity> npcs = new HashMap<>();
-    private boolean isVaultEnabled;
     public static ArrayList<Player> playersInFreecam = new ArrayList<>();
     public static UpdateReason updateResult = null;
     public static String version = null;
@@ -27,7 +26,6 @@ public class Main extends JavaPlugin implements Listener {
 
     public void onEnable() {
         loadConfig();
-        hook();
         UpdateChecker.init(this, pluginID);
         UpdateCheck();
         new Commands(this);
@@ -50,14 +48,6 @@ public class Main extends JavaPlugin implements Listener {
     public void loadConfig() {
         this.getConfig().options().copyDefaults(true);
         saveDefaultConfig();
-    }
-
-    public void hook() {
-        isVaultEnabled = Bukkit.getServer().getPluginManager().isPluginEnabled("Vault");
-    }
-
-    public boolean isVaultEnabled() {
-        return isVaultEnabled;
     }
 
     private void UpdateCheck() {
