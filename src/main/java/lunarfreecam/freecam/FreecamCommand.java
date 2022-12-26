@@ -67,9 +67,9 @@ public class FreecamCommand implements CommandExecutor {
             return;
         }
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100, 2);
+        npcManager.createNpc(player);
         Main.previousState.put(player.getUniqueId(), new PlayerState(player));
         player.setGameMode(GameMode.SPECTATOR);
-        npcManager.createNpc(player);
         Main.playersInFreecam.add(player);
     }
 }

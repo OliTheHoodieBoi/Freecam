@@ -4,6 +4,7 @@ import de.tr7zw.changeme.nbtapi.NBTEntity;
 import lunarfreecam.freecam.Main;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Chunk;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -40,9 +41,10 @@ public class NpcManager {
         zombieNBT.setString("DeathLootTable", "");
         zombieNBT.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
         zombieNBT.setObject("HandDropChances", new float[]{0.0f, 0.0f});
+        if (player.getGameMode().equals(GameMode.CREATIVE))
+            zombieNBT.setByte("Invulnerable", (byte) 1);
         zombie.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(0.0d);
         // Make zombie resemble player
-
         ItemStack playerhead = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) playerhead.getItemMeta();
         meta.setOwningPlayer(player);
