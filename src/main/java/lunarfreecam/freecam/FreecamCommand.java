@@ -36,7 +36,7 @@ public class FreecamCommand implements CommandExecutor {
                     return true;
                 }
                 if (player.getGameMode() == GameMode.SPECTATOR) {
-                    player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-spectator")));
+                    player.sendMessage(utils.Color(plugin.getConfig().getString("spectator")));
                     return true;
                 }
                 activateFreecam(player);
