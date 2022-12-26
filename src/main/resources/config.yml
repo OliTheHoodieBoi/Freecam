@@ -15,12 +15,13 @@
 ##################################################
 #                   Messages                     #
 ##################################################
-freecam-mode-on-success: '&8&l[&2&l!&8&l] &7Successfully went into FreeCam mode.'
-freecam-mode-off-success: '&8&l[&2&l!&8&l] &7Successfully went back to your previous location.'
-too-many-arguments-message: '&8&l[&c&l!&8&l] &7Too many arguments. Usage: &5/freecam'
-cannot-use-commands-message: '&8&l[&c&l!&8&l] &7You cant use commands while in FreeCam mode.'
-maximum-distance-reached-message: '&8&l[&c&l!&8&l] &7You have reached the maximum allowed distance.'
-no-permission-message: '&8&l[&c&l!&8&l] &7You dont have permission to use this command.'
+freecam-mode-on-success: "&8&l[&2&l!&8&l] &7Successfully went into FreeCam mode."
+freecam-mode-off-success: "&8&l[&2&l!&8&l] &7Successfully went back to your previous location."
+too-many-arguments-message: "&8&l[&c&l!&8&l] &7Too many arguments. Usage: &5/freecam"
+cannot-use-commands-message: "&8&l[&c&l!&8&l] &7You cant use commands while in FreeCam mode."
+maximum-distance-reached-message: "&8&l[&c&l!&8&l] &7You have reached the maximum allowed distance."
+no-permission-message: "&8&l[&c&l!&8&l] &7You don't have permission to use this command."
+freecam-not-player: "&8&l[&c&l!&8&l] &7Only players can use this command!"
 freecam-cooldown: "&8&l[&c&l!&8&l] &7You must wait %seconds% seconds before you do it again."
 freecam-spectate-teleport: "&8&l[&c&l!&8&l] &7You cant teleport when you are at freecam mode."
 freecam-cant-open-inv: "&8&l[&c&l!&8&l] &7You cant interact with inventories when you are on freecam mode"
