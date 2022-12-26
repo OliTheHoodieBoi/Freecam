@@ -7,56 +7,40 @@ import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 
 public class NpcManager {
     /**
-     * Spawn the Zombie-NPC
+     * Spawn the npc
      */
     public void createNpc(Player player) {
-        // Create a zombie
-        Zombie zombie = player.getWorld().spawn(player.getLocation(), Zombie.class);
-        // Remove vehicle if there is one
-        Entity vehicle = zombie.getVehicle();
-        if (vehicle != null)
-            vehicle.remove();
-        // Modify zombie NBT
-        NBTEntity zombieNBT = new NBTEntity(zombie);
-        zombieNBT.setByte("Silent", (byte) 1);
-        zombieNBT.setByte("NoAI", (byte) 1);
-        zombieNBT.setByte("IsBaby", (byte) 0);
-        zombieNBT.setByte("NoGravity", (byte) 0);
-        zombieNBT.setByte("CustomNameVisible", (byte) 1);
+        WanderingTrader npc = player.getWorld().spawn(player.getLocation(), WanderingTrader.class);
+        // Modify NBT
+        NBTEntity nbt = new NBTEntity(npc);
+        nbt.setByte("Silent", (byte) 1);
+        nbt.setByte("NoAI", (byte) 1);
+        nbt.setByte("CustomNameVisible", (byte) 1);
         String jsonName = GsonComponentSerializer.gson().serialize(player.displayName());
-        zombieNBT.setString("CustomName", jsonName);
-        zombieNBT.setByte("PersistenceRequired", (byte) 1);
-        zombieNBT.setByte("Glowing", (byte) 1);
-        zombieNBT.setByte("CanPickUpLoot", (byte) 0);
-        zombieNBT.setString("DeathLootTable", "");
-        zombieNBT.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
-        zombieNBT.setObject("HandDropChances", new float[]{0.0f, 0.0f});
+        nbt.setString("CustomName", jsonName);
+        nbt.setByte("PersistenceRequired", (byte) 1);
+        nbt.setByte("Glowing", (byte) 1);
+        nbt.setString("DeathLootTable", "");
+        nbt.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
+        nbt.setObject("HandDropChances", new float[]{0.0f, 0.0f});
         if (player.getGameMode().equals(GameMode.CREATIVE))
-            zombieNBT.setByte("Invulnerable", (byte) 1);
-        zombie.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(0.0d);
-        // Make zombie resemble player
+            nbt.setByte("Invulnerable", (byte) 1);
+        // Make npc resemble player
         ItemStack playerhead = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) playerhead.getItemMeta();
         meta.setOwningPlayer(player);
         playerhead.setItemMeta(meta);
-        zombie.getEquipment().setHelmet(playerhead);
-        // Copy player equipment to zombie
-        zombie.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());
-        zombie.getEquipment().setItemInOffHand(player.getInventory().getItemInOffHand());
-        zombie.getEquipment().setChestplate(player.getEquipment().getChestplate());
-        zombie.getEquipment().setLeggings(player.getEquipment().getLeggings());
-        zombie.getEquipment().setBoots(player.getEquipment().getBoots());
-        Main.npcs.put(player.getUniqueId(), zombie);
+        npc.getEquipment().setHelmet(playerhead);
+        // Copy player equipment to npc
+        npc.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());
+        Main.npcs.put(player.getUniqueId(), npc);
         // Force load chunk
         Chunk chunk = player.getChunk();
         chunk.setForceLoaded(true);
