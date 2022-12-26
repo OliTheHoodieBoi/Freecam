@@ -1,7 +1,6 @@
 package lunarfreecam.freecam;
 
 import FreecamUtils.NpcManager;
-import FreecamUtils.UpdateChecker;
 import FreecamUtils.utils;
 import com.cryptomorin.xseries.XSound;
 import org.bukkit.Bukkit;
@@ -33,19 +32,6 @@ public class Handler implements Listener {
         this.plugin = plugin;
         this.npcManager = new NpcManager();
         Bukkit.getPluginManager().registerEvents(this, plugin);
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("lunarfreecam.updates") || player.isOp()) {
-            if (Main.updateResult != null && Main.updateResult.equals(UpdateChecker.UpdateReason.NEW_UPDATE)) {
-                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                    player.sendMessage(utils.Color("&8&l[&c&l!&8&l] &7LunarFreecam is outdated current version is &c" + plugin.getDescription().getVersion() + "&7 Newest version is &a" + Main.version));
-                    player.sendMessage(utils.Color("&8&l[&c&l!&8&l] &7Download latest update at\n" + "&ahttps://www.spigotmc.org/resources/81104"));
-                }, 20);
-            }
-        }
     }
 
     /**
