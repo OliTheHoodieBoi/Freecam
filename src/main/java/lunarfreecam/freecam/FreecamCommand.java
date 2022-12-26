@@ -3,7 +3,6 @@ package lunarfreecam.freecam;
 import FreecamUtils.NpcManager;
 import FreecamUtils.utils;
 import org.bukkit.GameMode;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -66,7 +65,6 @@ public class FreecamCommand implements CommandExecutor {
             player.sendMessage(utils.Color(plugin.getConfig().getString("spectator")));
             return;
         }
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100, 2);
         npcManager.createNpc(player);
         Main.previousState.put(player.getUniqueId(), new PlayerState(player));
         player.setGameMode(GameMode.SPECTATOR);

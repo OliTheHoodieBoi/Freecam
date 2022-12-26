@@ -15,34 +15,16 @@
 ##################################################
 #                   Messages                     #
 ##################################################
-freecam-mode-on-success: "&8&l[&2&l!&8&l] &7Successfully went into FreeCam mode."
-freecam-mode-off-success: "&8&l[&2&l!&8&l] &7Successfully went back to your previous location."
 too-many-arguments: "&8&l[&c&l!&8&l] &7Too many arguments. Usage: &5/freecam"
 invalid-use: "&8&l[&c&l!&8&l] &7Invalid use. Usage: &5/freecam"
-cannot-use-commands: "&8&l[&c&l!&8&l] &7You can't use commands while in freecam mode."
-maximum-distance-reached: "&8&l[&c&l!&8&l] &7You have reached the maximum allowed distance."
 no-permission: "&8&l[&c&l!&8&l] &7You don't have permission to use this command."
 spectator: "&8&l[&c&l!&8&l] &7You cannot enter freecam in spectator mode."
 freecam-not-player: "&8&l[&c&l!&8&l] &7Only players can use this command!"
 freecam-illegal: "&8&l[&c&l!&8&l] &7You may not do this while in freecam mode."
-freecam-action-bar: "&8&l[&b&lFreeCam&8&l] &c&l%seconds% &8seconds left."
-freecam-canceled: "&8&l[&c&l!&8&l] &cYour freecam was cancelled"
-freecam-max-distance-reach: "&8&l[&c&l!&8&l] &7You have reached the max distance of Blocks"
+freecam-cancelled: "&8&l[&c&l!&8&l] &cYou were kicked out of freecam mode since your npc was hurt."
 reload: "&8&l[&c&l!&8&l] &7Config reloaded Successfully"
-freecam-no-use: "&8&l[&c&l!&8&l] &7You are not in freecam mode"
-on-freecam-cmd: "&8&l[&c&l!&8&l] &7This command is not allowed during FreeCam mode.             &8&l[&c&l!&8&l] &7Type &5/freecam stop &7to cancel FreeCam mode."
-already-freecam: "&8&l[&c&l!&8&l] &7You are already in freecam!"
-##################################################
-#                 Freecam Settings               #
-##################################################
-#Use -1 for unlimited freecam period
-freecam-period: 30
-#Use -1 for unlimited freecam distance
-freecam-max-distance: 120
-freecam-whitelisted-commands:
-  - /freecam stop
 ##################################################
 #             LunarFreecam Perms                 #
 ##################################################
-# freecam.use Allow players to use /freecam
+# freecam.use Allow players to enter freecam
 # freecam.reload Allow players to reload the plugin

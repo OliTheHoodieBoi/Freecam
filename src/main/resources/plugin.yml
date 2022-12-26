@@ -12,7 +12,7 @@ commands:
 permissions:
   freecam.use:
     default: true
-    description: Allow players to use /freecam
+    description: Allow players to enter freecam
   freecam.reload:
     default: op
     description: Allow Players to reload the plugin

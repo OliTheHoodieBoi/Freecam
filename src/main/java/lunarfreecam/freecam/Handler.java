@@ -4,13 +4,11 @@ import FreecamUtils.NpcManager;
 import FreecamUtils.utils;
 import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -37,7 +35,7 @@ public class Handler implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.SPECTATE) && Main.npcs.containsKey(player.getUniqueId())) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("freecam-illegal")));
+            player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-illegal")));
             event.setCancelled(true);
         }
         if (!Main.playersInFreecam.contains(event.getPlayer()) && Main.playersInFreecam.stream().anyMatch(c -> c.getLocation().getWorld().equals(event.getTo().getWorld()) && c.getLocation().distance(event.getTo()) < 0.1)) {
@@ -83,10 +81,11 @@ public class Handler implements Listener {
 
         LivingEntity victim = (LivingEntity) event.getEntity();
         if (Main.npcs.containsValue(victim)) {
-            event.setCancelled(true);
             Player player = Bukkit.getPlayer(getKey(Main.npcs, victim));
             assert player != null;
             NpcManager.exitFreecam(player);
+            player.sendMessage(utils.Color(plugin.getConfig().getString("freecam-cancelled")));
+            event.setCancelled(true);
         }
     }
 
