@@ -116,7 +116,7 @@ public class Handler implements Listener {
         if (Main.npcs.containsValue(victim)) {
             event.setCancelled(true);
             Player player = Bukkit.getPlayer(getKey(Main.npcs, victim));
-            npcManager.exitFreecam(player, Commands.previousGamemode.get(player));
+            npcManager.exitFreecam(player, FreecamCommand.previousGamemode.get(player));
         }
     }
 

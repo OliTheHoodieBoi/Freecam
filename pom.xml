@@ -40,6 +40,11 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>me.lucko:commodore</include>
+                                </includes>
+                            </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>de.tr7zw.changeme.nbtapi</pattern>
@@ -48,6 +53,10 @@
                                 <relocation>
                                     <pattern>com.connorlinfoot.actionbarapi</pattern>
                                     <shadedPattern>lunarfreecam.actionbarapi</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>me.lucko.commodore</pattern>
+                                    <shadedPattern>me.lunarfreecam.freecam.commodore</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -82,6 +91,10 @@
             <url>https://repo.codemc.org/repository/maven-public/</url>
             <layout>default</layout>
         </repository>
+        <repository>
+            <id>minecraft-repo</id>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -100,6 +113,12 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api-plugin</artifactId>
             <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>me.lucko</groupId>
+            <artifactId>commodore</artifactId>
+            <version>2.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

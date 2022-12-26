@@ -2,7 +2,7 @@ package FreecamUtils;
 
 import com.cryptomorin.xseries.XMaterial;
 import de.tr7zw.nbtapi.NBTEntity;
-import lunarfreecam.freecam.Commands;
+import lunarfreecam.freecam.FreecamCommand;
 import lunarfreecam.freecam.Main;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -62,7 +62,7 @@ public class NpcManager {
         player.teleport(Main.npcs.get(player.getUniqueId()).getLocation());
         this.deleteNpc(player);
         Main.npcs.remove(player.getUniqueId());
-        Commands.previousGamemode.remove(player);
+        FreecamCommand.previousGamemode.remove(player);
         Main.playersInFreecam.remove(player);
     }
 }

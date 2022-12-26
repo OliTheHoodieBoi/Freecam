@@ -1,7 +1,7 @@
 package FreecamUtils;
 
 import com.cryptomorin.xseries.messages.ActionBar;
-import lunarfreecam.freecam.Commands;
+import lunarfreecam.freecam.FreecamCommand;
 import lunarfreecam.freecam.Main;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
@@ -18,7 +18,7 @@ public class FreecamCountDown extends BukkitRunnable {
         this.player= player;
         this.seconds = seconds;
         this.plugin = main;
-        this.mode= Commands.previousGamemode.get(player);
+        this.mode= FreecamCommand.previousGamemode.get(player);
         this.npcmngr = new NpcManager();
     }
     @Override

@@ -28,7 +28,7 @@ public class Main extends JavaPlugin implements Listener {
         loadConfig();
         UpdateChecker.init(this, pluginID);
         UpdateCheck();
-        new Commands(this);
+        new FreecamCommand(this);
         new Handler(this);
         new NpcManager();
     }
