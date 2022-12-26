@@ -1,8 +1,9 @@
 name: LunarFreeCam
-authors: [ magas8, OliTheHoodieBoi ]
-main: lunarfreecam.freecam.Main
 description: A simple freecam plugin for all types of servers
+authors: [ magas8, OliTheHoodieBoi ]
 version: ${project.version}
+main: lunarfreecam.freecam.Main
+api-version: 1.19
 commands:
   freecam:
     usage: /freecam
