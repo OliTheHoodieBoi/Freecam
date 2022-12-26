@@ -6,8 +6,9 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.*;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.WanderingTrader;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -30,6 +31,7 @@ public class NpcManager {
         nbt.setString("DeathLootTable", "");
         nbt.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
         nbt.setObject("HandDropChances", new float[]{0.0f, 0.0f});
+        npc.addPotionEffects(player.getActivePotionEffects());
         if (player.getGameMode().equals(GameMode.CREATIVE))
             nbt.setByte("Invulnerable", (byte) 1);
         // Make npc resemble player
