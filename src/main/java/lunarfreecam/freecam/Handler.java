@@ -8,9 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Map;
 
@@ -55,18 +55,6 @@ public class Handler implements Listener {
     }
 
     /**
-     * Return player to the last location if he leaves the game!
-     *
-     * @param event event
-     */
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerDisconnect(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        if (Main.npcs.containsKey(player.getUniqueId()))
-            NpcManager.exitFreecam(player);
-    }
-
-    /**
      * Stop Freecam on any damage!
      *
      * @param event event
@@ -87,40 +75,6 @@ public class Handler implements Listener {
     }
 
     /**
-     * Stop Player from Interact with inventories
-     */
-    @EventHandler
-    public void onPlayerOpenInventory(InventoryOpenEvent e) {
-        if (Main.npcs.containsKey(e.getPlayer().getUniqueId())) {
-            if (!e.getInventory().getType().equals(InventoryType.PLAYER)) {
-                e.setCancelled(true);
-                e.getPlayer().sendMessage(Main.Color(plugin.getConfig().getString("freecam-cant-open-inv")));
-            }
-        }
-    }
-
-    /**
-     * Stop Player from Interacts
-     */
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerInteract(PlayerInteractEvent e) {
-        if (Main.npcs.containsKey(e.getPlayer().getUniqueId())) {
-            e.setCancelled(true);
-        }
-    }
-
-    /**
-     * Stop Player from DropItem
-     */
-    @EventHandler
-    public void onPlayerDropItems(PlayerDropItemEvent e) {
-        if (Main.npcs.containsKey(e.getPlayer().getUniqueId())) {
-            e.setCancelled(true);
-            e.getPlayer().sendMessage(Main.Color(plugin.getConfig().getString("freecam-cant-drop-items")));
-        }
-    }
-
-    /**
      * Return player to the last location if he leaves the game!
      *
      * @param event event
@@ -132,6 +86,11 @@ public class Handler implements Listener {
             NpcManager.exitFreecam(player);
     }
 
+    /**
+     * Cancel freecam if player changes gamemode
+     *
+     * @param event event
+     */
     @EventHandler
     public void onPlayerChangeGameMode(PlayerGameModeChangeEvent event) {
         if (event.getCause().equals(PlayerGameModeChangeEvent.Cause.PLUGIN))
