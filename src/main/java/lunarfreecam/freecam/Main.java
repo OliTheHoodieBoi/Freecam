@@ -1,15 +1,12 @@
 package lunarfreecam.freecam;
 
-import FreecamUtils.NpcManager;
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.GameMode;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -24,13 +21,15 @@ public class Main extends JavaPlugin {
     public final static ArrayList<Player> playersInFreecam = new ArrayList<>();
     public final static HashMap<UUID, PlayerState> previousState = new HashMap<>();
     public static ArrayList<Chunk> forceLoadedChunks = new ArrayList<>();
-    public static String version = null;
-    public static int pluginID = 81104;
+
+    public static String Color(String s){
+        s = ChatColor.translateAlternateColorCodes('&',s);
+        return s;
+    }
 
     public void onEnable() {
         loadConfig();
         new Handler(this);
-        new NpcManager();
 
         // Register command
         PluginCommand freecamCommand = getCommand("freecam");
@@ -45,18 +44,13 @@ public class Main extends JavaPlugin {
      * Return all players to their last locations if server stops or restarts!
      */
     public void onDisable() {
-        npcs.forEach((key, value) -> {
-            Player player = Bukkit.getPlayer(key);
-            player.setGameMode(GameMode.SURVIVAL);
-            player.teleport(Main.npcs.get(player.getUniqueId()).getLocation());
-            value.remove();
-        });
+        playersInFreecam.forEach(NpcManager::exitFreecam);
     }
 
     private void registerCompletions(PluginCommand command) {
         Commodore commodore = CommodoreProvider.getCommodore(this);
         commodore.register(command, literal("freecam")
-                .then(literal("reload")).then(literal("stop")));
+                .then(literal("reload")));
     }
 
     public void loadConfig() {

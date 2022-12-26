@@ -1,7 +1,6 @@
-package FreecamUtils;
+package lunarfreecam.freecam;
 
 import de.tr7zw.changeme.nbtapi.NBTEntity;
-import lunarfreecam.freecam.Main;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
@@ -14,10 +13,31 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 
 public class NpcManager {
-    /**
-     * Spawn the npc
-     */
-    public void createNpc(Player player) {
+
+    public static Main plugin;
+
+    public NpcManager(Main plugin) {
+        NpcManager.plugin = plugin;
+    }
+
+    public static void activateFreecam(Player player) {
+        if (Main.npcs.containsKey(player.getUniqueId())) {
+            // Exit freecam
+            NpcManager.exitFreecam(player);
+            return;
+        }
+        // Enter freecam
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            player.sendMessage(Main.Color(plugin.getConfig().getString("spectator")));
+            return;
+        }
+        createNpc(player);
+        Main.previousState.put(player.getUniqueId(), new PlayerState(player));
+        player.setGameMode(GameMode.SPECTATOR);
+        Main.playersInFreecam.add(player);
+    }
+
+    public static void createNpc(Player player) {
         WanderingTrader npc = player.getWorld().spawn(player.getLocation(), WanderingTrader.class);
         // Modify NBT
         NBTEntity nbt = new NBTEntity(npc);
@@ -50,18 +70,6 @@ public class NpcManager {
         Main.forceLoadedChunks.add(chunk);
     }
 
-    /**
-     * Remove the npc for a player
-     *
-     * @param player
-     */
-    public static void deleteNpc(Player player) {
-        LivingEntity npc = Main.npcs.get(player.getUniqueId());
-        Chunk chunk = npc.getChunk();
-        if (chunk.isForceLoaded() && Main.forceLoadedChunks.contains(chunk))
-            chunk.setForceLoaded(false);
-        npc.remove();
-    }
 
     public static void exitFreecam(Player player) {
         Main.previousState.get(player.getUniqueId()).apply(player);
@@ -72,5 +80,20 @@ public class NpcManager {
         Main.npcs.remove(player.getUniqueId());
         Main.previousState.remove(player.getUniqueId());
         Main.playersInFreecam.remove(player);
+    }
+
+    public static void cancelFreecam(Player player) {
+        NpcManager.deleteNpc(player);
+        Main.npcs.remove(player.getUniqueId());
+        Main.previousState.remove(player.getUniqueId());
+        Main.playersInFreecam.remove(player);
+    }
+
+    public static void deleteNpc(Player player) {
+        LivingEntity npc = Main.npcs.get(player.getUniqueId());
+        Chunk chunk = npc.getChunk();
+        if (chunk.isForceLoaded() && Main.forceLoadedChunks.contains(chunk))
+            chunk.setForceLoaded(false);
+        npc.remove();
     }
 }
