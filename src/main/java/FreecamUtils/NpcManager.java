@@ -32,6 +32,7 @@ public class NpcManager {
         nbt.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
         nbt.setObject("HandDropChances", new float[]{0.0f, 0.0f});
         npc.addPotionEffects(player.getActivePotionEffects());
+        npc.setRemainingAir(player.getRemainingAir());
         if (player.getGameMode().equals(GameMode.CREATIVE))
             nbt.setByte("Invulnerable", (byte) 1);
         // Make npc resemble player
@@ -65,6 +66,7 @@ public class NpcManager {
     public static void exitFreecam(Player player) {
         Main.previousState.get(player.getUniqueId()).apply(player);
         LivingEntity npc = Main.npcs.get(player.getUniqueId());
+        player.setRemainingAir(npc.getRemainingAir());
         player.teleport(npc.getLocation());
         deleteNpc(player);
         Main.npcs.remove(player.getUniqueId());
