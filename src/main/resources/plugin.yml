@@ -1,4 +1,4 @@
-name: LunarFreeCam
+name: Freecam
 description: A simple freecam plugin for all types of servers
 authors: [ magas8, OliTheHoodieBoi ]
 version: ${project.version}

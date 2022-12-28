@@ -32,7 +32,7 @@ public class Handler implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.SPECTATE) && Main.npcs.containsKey(player.getUniqueId())) {
-            player.sendMessage(Main.Color(plugin.getConfig().getString("freecam-illegal")));
+            player.sendMessage(plugin.message("freecam-illegal"));
             event.setCancelled(true);
         }
     }
@@ -45,7 +45,7 @@ public class Handler implements Listener {
     public void onPlayerStartSpectating(PlayerStartSpectatingEntityEvent event) {
         Player player = event.getPlayer();
         if (Main.npcs.containsKey(player.getUniqueId())) {
-            player.sendMessage(Main.Color(plugin.getConfig().getString("freecam-illegal")));
+            player.sendMessage(plugin.message("freecam-illegal"));
             event.setCancelled(true);
         }
     }
@@ -65,7 +65,7 @@ public class Handler implements Listener {
             Player player = Bukkit.getPlayer(getKey(Main.npcs, victim));
             assert player != null;
             NpcManager.exitFreecam(player);
-            player.sendMessage(Main.Color(plugin.getConfig().getString("freecam-cancelled")));
+            player.sendMessage(plugin.message("freecam-cancelled"));
             event.setCancelled(true);
         }
     }

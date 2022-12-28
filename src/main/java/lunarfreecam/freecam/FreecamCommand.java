@@ -21,12 +21,12 @@ public class FreecamCommand implements CommandExecutor {
         switch (args.length) {
             case 0:
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(Main.Color(plugin.getConfig().getString("freecam-not-player")));
+                    sender.sendMessage(plugin.message("freecam-not-player"));
                     return true;
                 }
                 Player player = (Player) sender;
                 if (!player.hasPermission("freecam.use")) {
-                    player.sendMessage(Main.Color(plugin.getConfig().getString("no-permission")));
+                    player.sendMessage(plugin.message("no-permission"));
                     return true;
                 }
                 NpcManager.activateFreecam(player);
@@ -35,16 +35,16 @@ public class FreecamCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (sender.hasPermission("freecam.reload")) {
                         plugin.reloadConfig();
-                        sender.sendMessage(Main.Color(plugin.getConfig().getString("reload")));
+                        sender.sendMessage(plugin.message("reload"));
                     } else {
-                        sender.sendMessage(Main.Color(plugin.getConfig().getString("no-permission")));
+                        sender.sendMessage(plugin.message("no-permission"));
                     }
                 } else {
-                    sender.sendMessage(Main.Color(plugin.getConfig().getString("invalid-use")));
+                    sender.sendMessage(plugin.message("invalid-use"));
                 }
                 return true;
             default:
-                 sender.sendMessage(Main.Color(plugin.getConfig().getString("too-many-arguments")));
+                 sender.sendMessage(plugin.message("too-many-arguments"));
                 return true;
         }
     }

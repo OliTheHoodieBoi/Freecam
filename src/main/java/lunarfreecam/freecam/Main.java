@@ -2,7 +2,10 @@ package lunarfreecam.freecam;
 
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Chunk;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.LivingEntity;
@@ -22,13 +25,9 @@ public class Main extends JavaPlugin {
     public final static HashMap<UUID, PlayerState> previousState = new HashMap<>();
     public static ArrayList<Chunk> forceLoadedChunks = new ArrayList<>();
 
-    public static String Color(String s){
-        s = ChatColor.translateAlternateColorCodes('&',s);
-        return s;
-    }
-
     public void onEnable() {
         loadConfig();
+        NpcManager.setPlugin(this);
         new Handler(this);
 
         // Register command
@@ -56,5 +55,12 @@ public class Main extends JavaPlugin {
     public void loadConfig() {
         this.getConfig().options().copyDefaults(true);
         saveDefaultConfig();
+    }
+
+    public TextComponent message(String key){
+        String m =this.getConfig().getString(key);
+        if (m == null)
+            return Component.text("Could not display message").color(NamedTextColor.RED);
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(m);
     }
 }

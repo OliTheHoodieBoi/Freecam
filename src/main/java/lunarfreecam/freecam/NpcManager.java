@@ -5,19 +5,18 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.WanderingTrader;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import java.util.Random;
 
 
 public class NpcManager {
 
-    public static Main plugin;
+    private static Main plugin;
 
-    public NpcManager(Main plugin) {
+    public static void setPlugin(Main plugin) {
         NpcManager.plugin = plugin;
     }
 
@@ -29,7 +28,11 @@ public class NpcManager {
         }
         // Enter freecam
         if (player.getGameMode().equals(GameMode.SPECTATOR)) {
-            player.sendMessage(Main.Color(plugin.getConfig().getString("spectator")));
+            player.sendMessage(plugin.message("freecam-spectator"));
+            return;
+        }
+        if (player.isSleeping()) {
+            player.sendMessage(plugin.message("freecam-sleeping"));
             return;
         }
         createNpc(player);
@@ -39,6 +42,21 @@ public class NpcManager {
     }
 
     public static void createNpc(Player player) {
+        LivingEntity npc = createStandingNpc(player);
+        Main.npcs.put(player.getUniqueId(), npc);
+        // Vehicle
+        Entity vehicle = player.getVehicle();
+        if (vehicle != null) {
+            vehicle.removePassenger(player);
+            vehicle.addPassenger(npc);
+        }
+        // Force load chunk
+        Chunk chunk = player.getChunk();
+        chunk.setForceLoaded(true);
+        Main.forceLoadedChunks.add(chunk);
+    }
+
+    public static LivingEntity createStandingNpc(Player player) {
         WanderingTrader npc = player.getWorld().spawn(player.getLocation(), WanderingTrader.class);
         // Modify NBT
         NBTEntity nbt = new NBTEntity(npc);
@@ -58,26 +76,47 @@ public class NpcManager {
         if (player.getGameMode().equals(GameMode.CREATIVE))
             nbt.setByte("Invulnerable", (byte) 1);
         // Make npc resemble player
-        ItemStack playerhead = new ItemStack(Material.PLAYER_HEAD, 1);
-        SkullMeta meta = (SkullMeta) playerhead.getItemMeta();
+        ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta meta = (SkullMeta) playerHead.getItemMeta();
         meta.setOwningPlayer(player);
-        playerhead.setItemMeta(meta);
-        npc.getEquipment().setHelmet(playerhead);
+        playerHead.setItemMeta(meta);
+        npc.getEquipment().setHelmet(playerHead);
         // Copy player equipment to npc
         npc.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());
-        Main.npcs.put(player.getUniqueId(), npc);
-        // Vehicle
-        Entity vehicle = player.getVehicle();
-        if (vehicle != null) {
-            vehicle.removePassenger(player);
-            vehicle.addPassenger(npc);
-        }
-        // Force load chunk
-        Chunk chunk = player.getChunk();
-        chunk.setForceLoaded(true);
-        Main.forceLoadedChunks.add(chunk);
+        npc.getEquipment().setChestplate(player.getInventory().getChestplate());
+        npc.getEquipment().setLeggings(player.getInventory().getLeggings());
+        npc.getEquipment().setBoots(player.getInventory().getBoots());
+        return npc;
     }
 
+    public static LivingEntity createCrawlingNpc(Player player) {
+        Cat npc = player.getWorld().spawn(player.getLocation(), Cat.class);
+        // Modify NBT
+        NBTEntity nbt = new NBTEntity(npc);
+        nbt.setByte("Silent", (byte) 1);
+        nbt.setByte("NoAI", (byte) 1);
+        nbt.setByte("CustomNameVisible", (byte) 1);
+        String jsonName = GsonComponentSerializer.gson().serialize(player.displayName());
+        nbt.setString("CustomName", jsonName);
+        nbt.setByte("PersistenceRequired", (byte) 1);
+        nbt.setByte("Glowing", (byte) 1);
+        nbt.setString("DeathLootTable", "");
+        nbt.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
+        nbt.setObject("HandDropChances", new float[]{0.0f, 0.0f});
+        npc.addPotionEffects(player.getActivePotionEffects());
+        npc.setRemainingAir(player.getRemainingAir());
+        int variant = new Random(player.getUniqueId().getMostSignificantBits()).nextInt(11);
+        nbt.setInteger("variant", variant);
+        if (player.getGameMode().equals(GameMode.CREATIVE))
+            nbt.setByte("Invulnerable", (byte) 1);
+        // Copy player equipment to npc
+        npc.getEquipment().setHelmet(player.getInventory().getHelmet());
+        npc.getEquipment().setChestplate(player.getInventory().getChestplate());
+        npc.getEquipment().setLeggings(player.getInventory().getLeggings());
+        npc.getEquipment().setBoots(player.getInventory().getBoots());
+
+        return npc;
+    }
 
     public static void exitFreecam(Player player) {
         // Restore state

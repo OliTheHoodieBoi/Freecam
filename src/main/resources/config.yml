@@ -18,10 +18,11 @@
 too-many-arguments: "&8&l[&c&l!&8&l] &cToo many arguments. Usage: &7/freecam"
 invalid-use: "&8&l[&c&l!&8&l] &cInvalid use. Usage: &7/freecam"
 no-permission: "&8&l[&c&l!&8&l] &cYou don't have permission to use this command."
-spectator: "&8&l[&c&l!&8&l] &cYou cannot enter freecam in spectator mode!"
+freecam-spectator: "&8&l[&c&l!&8&l] &cYou cannot enter freecam in spectator mode!"
+freecam-sleeping: "&8&l[&c&l!&8&l] &cYou cannot enter freecam while sleeping!"
 freecam-not-player: "&8&l[&c&l!&8&l] &cOnly players can use this command."
 freecam-illegal: "&8&l[&c&l!&8&l] &cYou may not do this in freecam mode."
-freecam-cancelled: "&8&l[&c&l!&8&l] &7You were kicked out of freecam mode since your npc was hurt."
+freecam-cancelled: "&8&l[&c&l!&8&l] &7You were kicked out of freecam since your npc was hurt."
 reload: "&8&l[&c&l!&8&l] &7Config reloaded successfully."
 ##################################################
 #             LunarFreecam Perms                 #
