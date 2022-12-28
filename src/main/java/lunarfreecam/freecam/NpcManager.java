@@ -5,6 +5,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WanderingTrader;
@@ -65,6 +66,12 @@ public class NpcManager {
         // Copy player equipment to npc
         npc.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());
         Main.npcs.put(player.getUniqueId(), npc);
+        // Vehicle
+        Entity vehicle = player.getVehicle();
+        if (vehicle != null) {
+            vehicle.removePassenger(player);
+            vehicle.addPassenger(npc);
+        }
         // Force load chunk
         Chunk chunk = player.getChunk();
         chunk.setForceLoaded(true);
@@ -73,10 +80,18 @@ public class NpcManager {
 
 
     public static void exitFreecam(Player player) {
+        // Restore state
         Main.previousState.get(player.getUniqueId()).apply(player);
         LivingEntity npc = Main.npcs.get(player.getUniqueId());
         player.setRemainingAir(npc.getRemainingAir());
         player.teleport(npc.getLocation());
+        // Remount possible vehicle
+        Entity vehicle = npc.getVehicle();
+        if (vehicle != null) {
+            vehicle.removePassenger(npc);
+            vehicle.addPassenger(player);
+        }
+        // Remove freecam
         deleteNpc(player);
         Main.npcs.remove(player.getUniqueId());
         Main.previousState.remove(player.getUniqueId());
