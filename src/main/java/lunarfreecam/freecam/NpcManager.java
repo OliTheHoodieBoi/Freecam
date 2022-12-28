@@ -27,7 +27,7 @@ public class NpcManager {
             return;
         }
         // Enter freecam
-        if (player.getGameMode() == GameMode.SPECTATOR) {
+        if (player.getGameMode().equals(GameMode.SPECTATOR)) {
             player.sendMessage(Main.Color(plugin.getConfig().getString("spectator")));
             return;
         }
@@ -51,6 +51,7 @@ public class NpcManager {
         nbt.setString("DeathLootTable", "");
         nbt.setObject("ArmorDropChances", new float[]{0.0f, 0.0f, 0.0f, 0.0f});
         nbt.setObject("HandDropChances", new float[]{0.0f, 0.0f});
+        nbt.getCompound("Offers").removeKey("Recipes");
         npc.addPotionEffects(player.getActivePotionEffects());
         npc.setRemainingAir(player.getRemainingAir());
         if (player.getGameMode().equals(GameMode.CREATIVE))
