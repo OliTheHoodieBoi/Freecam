@@ -9,7 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Map;
@@ -76,7 +76,7 @@ public class Handler implements Listener {
      * @param event event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerDisconnect(PlayerKickEvent event) {
+    public void onPlayerDisconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if (Main.npcs.containsKey(player.getUniqueId()))
             NpcManager.exitFreecam(player);
